@@ -1,0 +1,35 @@
+名称：SSH 登录
+
+在:
+  日程安排:
+    - cron: '32 10 2 * *'# 每月的 5号 北京时间 19 点运行32 10 2 * * '  
+  工作流触发:
+
+工作:
+  ssh登录:
+    运行于：ubuntu-latest
+
+    步骤:
+      - 名称: 检出仓库
+        使用：actions/checkout@v2
+      
+      - 名称: 设置Python
+        使用：actions/setup-python@v2
+        与:
+          python-version： '3.x'
+
+      - 名称: 安装依赖项
+        运行: |
+          python -m pip install --upgrade pip
+          pip install paramiko requests
+      
+      - 名称: 运行Python脚本
+        环境:
+          SSH信息： ${{ secrets.SSH信息 }}
+          PUSHPLUS_TOKEN：${{ secrets.PUSHPLUS_TOKEN }}
+          邮件：${{ secrets.MAIL }}
+          推送： ${{ secrets.PUSH }}
+          TELEGRAM_CHAT_ID：${{ secrets.TELEGRAM_CHAT_ID }}
+          TELEGRAM_BOT_TOKEN：${{ secrets.TELEGRAM_BOT_TOKEN }}
+          
+        运行： python run.py
